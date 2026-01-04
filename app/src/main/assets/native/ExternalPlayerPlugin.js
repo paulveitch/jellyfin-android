@@ -100,7 +100,7 @@ export class ExternalPlayerPlugin {
         };
 
         // Check if user has enabled auto-play next episode or if this is an intro
-        const enableNextEpisodeAutoPlay = this.userSettings ? this.userSettings.enableNextEpisodeAutoPlay() : false;
+        const enableNextEpisodeAutoPlay = this.userSettings?.enableNextEpisodeAutoPlay?.() ?? false;
         this.playbackManager._playNextAfterEnded = this._isIntro || enableNextEpisodeAutoPlay;
         this.events.trigger(this, 'stopped', [stopInfo]);
         this._currentSrc = this._currentTime = null;
