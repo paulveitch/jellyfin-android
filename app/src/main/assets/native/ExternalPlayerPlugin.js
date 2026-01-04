@@ -1,9 +1,10 @@
 export class ExternalPlayerPlugin {
-    constructor({ events, playbackManager }) {
+    constructor({ events, playbackManager, userSettings }) {
         window['ExtPlayer'] = this;
 
         this.events = events;
         this.playbackManager = playbackManager;
+        this.userSettings = userSettings;
 
         this.name = 'External Player';
         this.type = 'mediaplayer';
@@ -98,7 +99,9 @@ export class ExternalPlayerPlugin {
             src: this._currentSrc
         };
 
-        this.playbackManager._playNextAfterEnded = this._isIntro;
+        // Check if user has enabled auto-play next episode or if this is an intro
+        const enableNextEpisodeAutoPlay = this.userSettings ? this.userSettings.enableNextEpisodeAutoPlay() : false;
+        this.playbackManager._playNextAfterEnded = this._isIntro || enableNextEpisodeAutoPlay;
         this.events.trigger(this, 'stopped', [stopInfo]);
         this._currentSrc = this._currentTime = null;
     }
